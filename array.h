@@ -19,12 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * C dynamic array
+ * A Minimal C Dynamic Array
+ *
+ * Note: This project is said to be complete so only bug fixes and patches are
+ * maintained.
  *
  * Usage:
- *   Make an array pointer and assign it to array using array creation function.
- *   Elements can be inserted using push function.
- *   Make sure to remove (clear) all the elements and then free the array.
+ *   Include the library array.h to your C program.
+ *   The array is of type arr_t and it's used as a pointer.
+ *   Use crtarr funcion and assign the returning value to arr_t* variable
+ *     (make sure to make one first).
+ *   You can add an element to the array using addele function.
+ *   You can remove an element from the array by using remele function.
+ *   Make sure to delete the array once you are done with it using delarr function.
+ *     Don't worry, it will clear the array automatically!
+ *
+ * Errors:
+ *   Segmentation faults are most probably what you get when there is an error.
+ *   You might also see a log displaying the error in the terminal.
+ *   If the array failed to be created by the crtarr function then it might return NULL.
  */
 
 #ifndef ARRAY_H
