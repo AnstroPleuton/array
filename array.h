@@ -46,23 +46,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/* #define PRINT_INFO */
-/* #define PRINT_DEBUG */
-#define PRINT_ERROR
+/* #define PRTINFO */
+/* #define PRTDBG */
+#define PRTERR
 
-#ifdef PRINT_INFO
-#define PRINT_ENTERS(function) printf("  Info: file: %s, function enters: %s\n", ARRAY_H, function)
-#define PRINT_RETURN(function) printf("  Info: file: %s, function return: %s\n", ARRAY_H, function)
+#ifdef PRTINFO
+#define PRTENT(function) printf("  Info: file: %s, function enters: %s\n", ARRAY_H, function)
+#define PRTRET(function) printf("  Info: file: %s, function return: %s\n", ARRAY_H, function)
 #else
-#define PRINT_ENTERS(function)
-#define PRINT_RETURN(function)
+#define PRTENT(function)
+#define PRTRET(function)
 #endif
-#ifdef PRINT_DEBUG
+#ifdef PRTDBG
 #define DEBUG(string) printf("    Degug: %s\n", string)
 #else
 #define DEBUG(string)
 #endif
-#ifdef PRINT_ERROR
+#ifdef PRTERR
 #define ERROR(string) printf("    Error: %s\n", string)
 #else
 #define ERROR(string)
@@ -83,7 +83,7 @@ typedef struct {
 
 arr_t *crtarr(size_t typesize)
 {
-	PRINT_ENTERS("crtarr");
+	PRTENT("crtarr");
 	DEBUG("Creating an array");
 	arr_t *array = (arr_t *) malloc(sizeof(arr_t));
 
@@ -109,13 +109,13 @@ arr_t *crtarr(size_t typesize)
 	array->base->next = NULL;
 
 	DEBUG("Successfully allocated the memory for the base");
-	PRINT_RETURN("crtarr");
+	PRTRET("crtarr");
 	return array;
 }
 
 void clrarr(arr_t *array)
 {
-	PRINT_ENTERS("clrarr");
+	PRTENT("clrarr");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return;
@@ -133,12 +133,12 @@ void clrarr(arr_t *array)
 	}
 
 	DEBUG("Cleared an array");
-	PRINT_RETURN("clrarr");
+	PRTRET("clrarr");
 }
 
 void delarr(arr_t *array)
 {
-	PRINT_ENTERS("delarr");
+	PRTENT("delarr");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return;
@@ -151,14 +151,14 @@ void delarr(arr_t *array)
 	}
 	free(array);
 	DEBUG("Array deleted");
-	PRINT_RETURN("delarr");
+	PRTRET("delarr");
 }
 
 
 
 ele_t *getele(arr_t *array, size_t index)
 {
-	PRINT_ENTERS("getele");
+	PRTENT("getele");
 	ele_t *element = NULL;
 
 	if (!array) {
@@ -180,13 +180,13 @@ ele_t *getele(arr_t *array, size_t index)
 		}
 	}
 
-	PRINT_RETURN("getele");
+	PRTRET("getele");
 	return element;
 }
 
 void updarrsize(arr_t *array)
 {
-	PRINT_ENTERS("updarrsize");
+	PRTENT("updarrsize");
 	ele_t *element = NULL;
 	size_t size = 0;
 
@@ -206,18 +206,18 @@ void updarrsize(arr_t *array)
 	/* The base is not considered as an element */
 	--size;
 	DEBUG("Successfully calculated the size of an array");
-	PRINT_RETURN("updarrsize");
+	PRTRET("updarrsize");
 }
 
 size_t getarrsize(arr_t *array)
 {
-	PRINT_ENTERS("getarrsize");
+	PRTENT("getarrsize");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return 0;
 	}
 	updarrsize(array);
-	PRINT_RETURN("getarrsize");
+	PRTRET("getarrsize");
 	return array->size;
 }
 
@@ -226,7 +226,7 @@ size_t getarrsize(arr_t *array)
 /* These functions are not supposed to be used externally */
 ele_t *crtele(size_t typesize)
 {
-	PRINT_ENTERS("crtele");
+	PRTENT("crtele");
 	DEBUG("Creating an element");
 	ele_t *element = (ele_t *) malloc(sizeof(ele_t));
 
@@ -246,13 +246,13 @@ ele_t *crtele(size_t typesize)
 	}
 
 	DEBUG("Successfully allocated memory for the data of an element");
-	PRINT_RETURN("crtele");
+	PRTRET("crtele");
 	return element;
 }
 
 void delele(ele_t *element)
 {
-	PRINT_ENTERS("delele");
+	PRTENT("delele");
 	if (!element) {
 		ERROR("Unexpected null element");
 		return;
@@ -262,7 +262,7 @@ void delele(ele_t *element)
 		free(element->data);
 	}
 	free(element);
-	PRINT_RETURN("delele");
+	PRTRET("delele");
 }
 
 
@@ -271,7 +271,7 @@ void delele(ele_t *element)
  * array by giving it the size of the array */
 ele_t *addele(arr_t *array, size_t index)
 {
-	PRINT_ENTERS("addele");
+	PRTENT("addele");
 	ele_t *new_element = NULL;
 	ele_t *prev = NULL;
 	ele_t *temp = NULL;
@@ -308,13 +308,13 @@ ele_t *addele(arr_t *array, size_t index)
 	array->size++;
 
 	DEBUG("Successfully added an element");
-	PRINT_RETURN("addele");
+	PRTRET("addele");
 	return new_element;
 }
 
 void remele(arr_t *array, size_t index)
 {
-	PRINT_ENTERS("remele");
+	PRTENT("remele");
 	ele_t *element = NULL;
 	ele_t *prev = NULL;
 	ele_t *next = NULL;
@@ -356,7 +356,7 @@ void remele(arr_t *array, size_t index)
 	array->size--;
 
 	DEBUG("Removed an element");
-	PRINT_RETURN("remele");
+	PRTRET("remele");
 }
 
 #endif
