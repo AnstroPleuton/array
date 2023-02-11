@@ -26,22 +26,22 @@
  *
  * Usage:
  *   Include the library array.h to your C program.
- *   The array is of type arr_t and it's used as a pointer.
- *   Use crtarr funcion and assign the returning value to arr_t* variable
+ *   The array is of type array_t and it's used as a pointer.
+ *   Use create_array funcion and assign the returning value to array_t* variable
  *     (make sure to make one first).
- *   You can add an element to the array using addele function.
- *   You can remove an element from the array by using remele function.
- *   Make sure to delete the array once you are done with it using delarr function.
+ *   You can add an element to the array using add_element function.
+ *   You can remove an element from the array by using remove_element function.
+ *   Make sure to delete the array once you are done with it using delete_array function.
  *     Don't worry, it will clear the array automatically!
  *
  * Errors:
  *   Segmentation faults are most probably what you get when there is an error.
  *   You might also see a log displaying the error in the terminal.
- *   If the array failed to be created by the crtarr function then it might return NULL.
+ *   If the array failed to be created by the create_array function then it might return NULL.
  */
 
 #ifndef ARRAY_H
-#define ARRAY_H "array.c"
+#define ARRAY_H "array.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -68,24 +68,28 @@
 #define ERROR(string)
 #endif
 
+/* Implement the array code by defining
+ * ARRAY_IMPL before including this library */
+
 typedef struct {
 	void *data;
 	void *next;
-} ele_t;
+} element_t;
 
 typedef struct {
 	/* The base does not contain an element,
 	 * the next of the base is the index of 0 */
-	ele_t *base;
+	element_t *base;
 	size_t size;
 	size_t typesize;
-} arr_t;
+} array_t;
 
-arr_t *crtarr(size_t typesize)
+array_t *create_array(size_t typesize)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("crtarr");
+	PRTENT("create_array");
 	DEBUG("Creating an array");
-	arr_t *array = (arr_t *) malloc(sizeof(arr_t));
+	array_t *array = (array_t *) malloc(sizeof(array_t));
 
 	if (!array) {
 		ERROR("Unable to allocate memory for an array");
@@ -98,7 +102,7 @@ arr_t *crtarr(size_t typesize)
 	DEBUG("Successfully created an array");
 	DEBUG("Allocating memory for the base");
 
-	array->base = (ele_t *) malloc(sizeof(ele_t));
+	array->base = (element_t *) malloc(sizeof(element_t));
 
 	if (!array->base) {
 		ERROR("Unable to allocate memory for the base of an array");
@@ -109,57 +113,69 @@ arr_t *crtarr(size_t typesize)
 	array->base->next = NULL;
 
 	DEBUG("Successfully allocated the memory for the base");
-	PRTRET("crtarr");
+	PRTRET("create_array");
 	return array;
 }
+#else
+;
+#endif
 
-void clrarr(arr_t *array)
+void clear_array(array_t *array)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("clrarr");
+	PRTENT("clear_array");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return;
 	}
 
 	DEBUG("Clearing an array");
-	updarrsize(array);
+	update_array_size(array);
 	if (array->size == 0) {
 		DEBUG("An array is already empty");
 		return;
 	}
 
 	for (int i = array->size - 1; i >= 0; i--) {
-		remele(array, i);
+		remove_element(array, i);
 	}
 
 	DEBUG("Cleared an array");
-	PRTRET("clrarr");
+	PRTRET("clear_array");
 }
+#else
+;
+#endif
 
-void delarr(arr_t *array)
+void delete_array(array_t *array)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("delarr");
+	PRTENT("delete_array");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return;
 	}
 
 	DEBUG("Deleting an array");
-	clrarr(array);
+	clear_array(array);
 	if (array->base) {
 		free(array->base);
 	}
 	free(array);
 	DEBUG("Array deleted");
-	PRTRET("delarr");
+	PRTRET("delete_array");
 }
+#else
+;
+#endif
 
 
 
-ele_t *getele(arr_t *array, size_t index)
+element_t *get_element(array_t *array, size_t index)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("getele");
-	ele_t *element = NULL;
+	PRTENT("get_element");
+	element_t *element = NULL;
 
 	if (!array) {
 		ERROR("Unexpected null array");
@@ -172,7 +188,7 @@ ele_t *getele(arr_t *array, size_t index)
 	/* Note, I am not using 'i <= index' because I want
 	 * the size to overflow in case the index was -1 */
 	for (int i = 0; i < (index + 1); i++) {
-		element = (ele_t *) element->next;
+		element = (element_t *) element->next;
 
 		if (!element) {
 			ERROR("Element does not exist");
@@ -180,14 +196,18 @@ ele_t *getele(arr_t *array, size_t index)
 		}
 	}
 
-	PRTRET("getele");
+	PRTRET("get_element");
 	return element;
 }
+#else
+;
+#endif
 
-void updarrsize(arr_t *array)
+void update_array_size(array_t *array)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("updarrsize");
-	ele_t *element = NULL;
+	PRTENT("update_array_size");
+	element_t *element = NULL;
 	size_t size = 0;
 
 	if (!array) {
@@ -199,36 +219,44 @@ void updarrsize(arr_t *array)
 	element = array->base;
 
 	while (element) {
-		element = (ele_t *) element->next;
+		element = (element_t *) element->next;
 		size++;
 	}
 
 	/* The base is not considered as an element */
 	--size;
 	DEBUG("Successfully calculated the size of an array");
-	PRTRET("updarrsize");
+	PRTRET("update_array_size");
 }
+#else
+;
+#endif
 
-size_t getarrsize(arr_t *array)
+size_t get_array_size(array_t *array)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("getarrsize");
+	PRTENT("get_array_size");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return 0;
 	}
-	updarrsize(array);
-	PRTRET("getarrsize");
+	update_array_size(array);
+	PRTRET("get_array_size");
 	return array->size;
 }
+#else
+;
+#endif
 
 
 
 /* These functions are not supposed to be used externally */
-ele_t *crtele(size_t typesize)
+element_t *create_element(size_t typesize)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("crtele");
+	PRTENT("create_element");
 	DEBUG("Creating an element");
-	ele_t *element = (ele_t *) malloc(sizeof(ele_t));
+	element_t *element = (element_t *) malloc(sizeof(element_t));
 
 	if (!element) {
 		ERROR("Failed to allocate memory for an element");
@@ -246,13 +274,17 @@ ele_t *crtele(size_t typesize)
 	}
 
 	DEBUG("Successfully allocated memory for the data of an element");
-	PRTRET("crtele");
+	PRTRET("create_element");
 	return element;
 }
+#else
+;
+#endif
 
-void delele(ele_t *element)
+void delete_element(element_t *element)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("delele");
+	PRTENT("delete_element");
 	if (!element) {
 		ERROR("Unexpected null element");
 		return;
@@ -262,34 +294,38 @@ void delele(ele_t *element)
 		free(element->data);
 	}
 	free(element);
-	PRTRET("delele");
+	PRTRET("delete_element");
 }
+#else
+;
+#endif
 
 
 
 /* You can add element at the end of the
  * array by giving it the size of the array */
-ele_t *addele(arr_t *array, size_t index)
+element_t *add_element(array_t *array, size_t index)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("addele");
-	ele_t *new_element = NULL;
-	ele_t *prev = NULL;
-	ele_t *temp = NULL;
+	PRTENT("add_element");
+	element_t *new_element = NULL;
+	element_t *prev = NULL;
+	element_t *temp = NULL;
 
 	if (!array) {
 		ERROR("Unexpected null array");
 		return NULL;
 	}
 
-	updarrsize(array);
+	update_array_size(array);
 	if (index > array->size) {
 		ERROR("Index larger than the (size + 1) of an array");
 		return NULL;
 	}
 
 	DEBUG("Adding an element to an array");
-	prev = getele(array, index - 1);
-	new_element = crtele(array->typesize);
+	prev = get_element(array, index - 1);
+	new_element = create_element(array->typesize);
 
 	/* There can't be no previous because the base should exist */
 	if (!prev) {
@@ -301,46 +337,50 @@ ele_t *addele(arr_t *array, size_t index)
 		return NULL;
 	}
 
-	temp = (ele_t *) prev->next;
+	temp = (element_t *) prev->next;
 	prev->next = (void *) new_element;
 	new_element->next = (void *) temp;
 
 	array->size++;
 
 	DEBUG("Successfully added an element");
-	PRTRET("addele");
+	PRTRET("add_element");
 	return new_element;
 }
+#else
+;
+#endif
 
-void remele(arr_t *array, size_t index)
+void remove_element(array_t *array, size_t index)
+#ifdef ARRAY_IMPL
 {
-	PRTENT("remele");
-	ele_t *element = NULL;
-	ele_t *prev = NULL;
-	ele_t *next = NULL;
+	PRTENT("remove_element");
+	element_t *element = NULL;
+	element_t *prev = NULL;
+	element_t *next = NULL;
 
 	if (!array) {
 		ERROR("Unexpected null array");
 		return;
 	}
-	updarrsize(array);
+	update_array_size(array);
 	if (index >= array->size) {
 		ERROR("Index larger than the size of an array");
 		return;
 	}
 
 	DEBUG("Removing an element");
-	element = getele(array, index);
+	element = get_element(array, index);
 	if (!element) {
 		ERROR("Cannot find an element");
 		return;
 	}
 
-	prev = getele(array, index - 1);
+	prev = get_element(array, index - 1);
 
 	/* To prevent unnecessary error logs, I used an 'if' check */
 	if (index < array->size - 1) {
-		next = getele(array, index + 1);
+		next = get_element(array, index + 1);
 	}
 	if (!prev) {
 		ERROR("Cannot find the previous element or the base of an array");
@@ -352,11 +392,14 @@ void remele(arr_t *array, size_t index)
 		prev->next = next;
 	}
 
-	delele(element);
+	delete_element(element);
 	array->size--;
 
 	DEBUG("Removed an element");
-	PRTRET("remele");
+	PRTRET("remove_element");
 }
+#else
+;
+#endif
 
 #endif
