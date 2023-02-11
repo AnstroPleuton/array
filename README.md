@@ -8,7 +8,7 @@ A Minimal C Dynamic Array
 
 # Usage
 Define **ARRAY_IMPL** to implement the function definitions. <br>
-Include the library **array.h** to your C program. <br>
+Include the library **array.h** to your C/C++ program. <br>
 The array is of type **array_t** and it's used as a *pointer*. <br>
 Use **create_array** funcion and assign the returning value to array_t* variable (make sure to make one first). <br>
 You can add an element to the array using **add_element** function. <br>

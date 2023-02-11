@@ -46,23 +46,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/* #define PRTINFO */
-/* #define PRTDBG */
-#define PRTERR
+/* #define PRINT_INFO */
+/* #define PRINT_DEBUG */
+#define PRINT_ERROR
 
-#ifdef PRTINFO
-#define PRTENT(function) printf("  Info: file: %s, function enters: %s\n", ARRAY_H, function)
-#define PRTRET(function) printf("  Info: file: %s, function return: %s\n", ARRAY_H, function)
+#ifdef PRINT_INFO
+#define PRINT_ENTER(function) printf("  Info: file: %s, function enters: %s\n", ARRAY_H, function)
+#define PRINT_RETURN(function) printf("  Info: file: %s, function return: %s\n", ARRAY_H, function)
 #else
-#define PRTENT(function)
-#define PRTRET(function)
+#define PRINT_ENTER(function)
+#define PRINT_RETURN(function)
 #endif
-#ifdef PRTDBG
+#ifdef PRINT_DEBUG
 #define DEBUG(string) printf("    Degug: %s\n", string)
 #else
 #define DEBUG(string)
 #endif
-#ifdef PRTERR
+#ifdef PRINT_ERROR
 #define ERROR(string) printf("    Error: %s\n", string)
 #else
 #define ERROR(string)
@@ -87,7 +87,7 @@ typedef struct {
 array_t *create_array(size_t typesize)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("create_array");
+	PRINT_ENTER("create_array");
 	DEBUG("Creating an array");
 	array_t *array = (array_t *) malloc(sizeof(array_t));
 
@@ -113,7 +113,7 @@ array_t *create_array(size_t typesize)
 	array->base->next = NULL;
 
 	DEBUG("Successfully allocated the memory for the base");
-	PRTRET("create_array");
+	PRINT_RETURN("create_array");
 	return array;
 }
 #else
@@ -123,7 +123,7 @@ array_t *create_array(size_t typesize)
 void clear_array(array_t *array)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("clear_array");
+	PRINT_ENTER("clear_array");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return;
@@ -141,7 +141,7 @@ void clear_array(array_t *array)
 	}
 
 	DEBUG("Cleared an array");
-	PRTRET("clear_array");
+	PRINT_RETURN("clear_array");
 }
 #else
 ;
@@ -150,7 +150,7 @@ void clear_array(array_t *array)
 void delete_array(array_t *array)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("delete_array");
+	PRINT_ENTER("delete_array");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return;
@@ -163,7 +163,7 @@ void delete_array(array_t *array)
 	}
 	free(array);
 	DEBUG("Array deleted");
-	PRTRET("delete_array");
+	PRINT_RETURN("delete_array");
 }
 #else
 ;
@@ -174,7 +174,7 @@ void delete_array(array_t *array)
 element_t *get_element(array_t *array, size_t index)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("get_element");
+	PRINT_ENTER("get_element");
 	element_t *element = NULL;
 
 	if (!array) {
@@ -196,7 +196,7 @@ element_t *get_element(array_t *array, size_t index)
 		}
 	}
 
-	PRTRET("get_element");
+	PRINT_RETURN("get_element");
 	return element;
 }
 #else
@@ -206,7 +206,7 @@ element_t *get_element(array_t *array, size_t index)
 void update_array_size(array_t *array)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("update_array_size");
+	PRINT_ENTER("update_array_size");
 	element_t *element = NULL;
 	size_t size = 0;
 
@@ -226,7 +226,7 @@ void update_array_size(array_t *array)
 	/* The base is not considered as an element */
 	--size;
 	DEBUG("Successfully calculated the size of an array");
-	PRTRET("update_array_size");
+	PRINT_RETURN("update_array_size");
 }
 #else
 ;
@@ -235,13 +235,13 @@ void update_array_size(array_t *array)
 size_t get_array_size(array_t *array)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("get_array_size");
+	PRINT_ENTER("get_array_size");
 	if (!array) {
 		ERROR("Unexpected null array");
 		return 0;
 	}
 	update_array_size(array);
-	PRTRET("get_array_size");
+	PRINT_RETURN("get_array_size");
 	return array->size;
 }
 #else
@@ -254,7 +254,7 @@ size_t get_array_size(array_t *array)
 element_t *create_element(size_t typesize)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("create_element");
+	PRINT_ENTER("create_element");
 	DEBUG("Creating an element");
 	element_t *element = (element_t *) malloc(sizeof(element_t));
 
@@ -274,7 +274,7 @@ element_t *create_element(size_t typesize)
 	}
 
 	DEBUG("Successfully allocated memory for the data of an element");
-	PRTRET("create_element");
+	PRINT_RETURN("create_element");
 	return element;
 }
 #else
@@ -284,7 +284,7 @@ element_t *create_element(size_t typesize)
 void delete_element(element_t *element)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("delete_element");
+	PRINT_ENTER("delete_element");
 	if (!element) {
 		ERROR("Unexpected null element");
 		return;
@@ -294,7 +294,7 @@ void delete_element(element_t *element)
 		free(element->data);
 	}
 	free(element);
-	PRTRET("delete_element");
+	PRINT_RETURN("delete_element");
 }
 #else
 ;
@@ -307,7 +307,7 @@ void delete_element(element_t *element)
 element_t *add_element(array_t *array, size_t index)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("add_element");
+	PRINT_ENTER("add_element");
 	element_t *new_element = NULL;
 	element_t *prev = NULL;
 	element_t *temp = NULL;
@@ -344,7 +344,7 @@ element_t *add_element(array_t *array, size_t index)
 	array->size++;
 
 	DEBUG("Successfully added an element");
-	PRTRET("add_element");
+	PRINT_RETURN("add_element");
 	return new_element;
 }
 #else
@@ -354,7 +354,7 @@ element_t *add_element(array_t *array, size_t index)
 void remove_element(array_t *array, size_t index)
 #ifdef ARRAY_IMPL
 {
-	PRTENT("remove_element");
+	PRINT_ENTER("remove_element");
 	element_t *element = NULL;
 	element_t *prev = NULL;
 	element_t *next = NULL;
@@ -396,7 +396,7 @@ void remove_element(array_t *array, size_t index)
 	array->size--;
 
 	DEBUG("Removed an element");
-	PRTRET("remove_element");
+	PRINT_RETURN("remove_element");
 }
 #else
 ;
