@@ -20,24 +20,8 @@
  * SOFTWARE.
  *
  * A Minimal C Dynamic Array
- *
- * Note: This project is said to be complete so only bug fixes and patches are
- * maintained.
- *
- * Usage:
- *   Include the library array.h to your C program.
- *   The array is of type array_t and it's used as a pointer.
- *   Use create_array funcion and assign the returning value to array_t* variable
- *     (make sure to make one first).
- *   You can add an element to the array using add_element function.
- *   You can remove an element from the array by using remove_element function.
- *   Make sure to delete the array once you are done with it using delete_array function.
- *     Don't worry, it will clear the array automatically!
- *
- * Errors:
- *   Segmentation faults are most probably what you get when there is an error.
- *   You might also see a log displaying the error in the terminal.
- *   If the array failed to be created by the create_array function then it might return NULL.
+ * Usage and other information is provided in the README.md file from the
+ * repository. Please refer to that to know how to use this library.
  */
 
 #ifndef ARRAY_H
@@ -46,9 +30,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/* #define PRINT_INFO */
-/* #define PRINT_DEBUG */
-#define PRINT_ERROR
+/*
+ * Define these for logs
+ * PRINT_INFO will print the entering and exiting of function
+ * PRINT_DEBUG will print any small debug details
+ * PRINT_ERROR will print only the errors occurred in the function
+ */
 
 #ifdef PRINT_INFO
 #define PRINT_ENTER(function) printf("  Info: file: %s, function enters: %s\n", ARRAY_H, function)
