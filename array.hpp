@@ -35,6 +35,7 @@ namespace aplib {
 template<typename type_t>
 class array {
 array_t *internal_array;
+public:
 
 array()
 #ifdef ARRAY_IMPL
@@ -54,31 +55,31 @@ array()
 ;
 #endif
 
-array<type_t> &add(size_t index)
+array &add(size_t index)
 #ifdef ARRAY_IMPL
 {
 	add_element(internal_array, index);
-	return this;
+	return *this;
 }
 #else
 ;
 #endif
 
-array<type_t> &add(size_t index, type_t value)
+array &add(size_t index, type_t value)
 #ifdef ARRAY_IMPL
 {
 	*(type_t *) add_element(internal_array, index)->data = value;
-	return this;
+	return *this;
 }
 #else
 ;
 #endif
 
-array<type_t> &remove(size_t index)
+array &remove(size_t index)
 #ifdef ARRAY_IMPL
 {
 	remove_element(internal_array, index);
-	return this;
+	return *this;
 }
 #else
 ;
@@ -93,31 +94,31 @@ size_t size()
 ;
 #endif
 
-array<type_t> &push_back()
+array &push_back()
 #ifdef ARRAY_IMPL
 {
 	add(size());
-	return this;
+	return *this;
 }
 #else
 ;
 #endif
 
-array<type_t> &push_back(type_t value)
+array &push_back(type_t value)
 #ifdef ARRAY_IMPL
 {
 	add(size(), value);
-	return this;
+	return *this;
 }
 #else
 ;
 #endif
 
-array<type_t> &pop_back()
+array &pop_back()
 #ifdef ARRAY_IMPL
 {
 	remove(size());
-	return this;
+	return *this;
 }
 #else
 ;

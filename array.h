@@ -107,57 +107,6 @@ array_t *create_array(size_t typesize)
 ;
 #endif
 
-void clear_array(array_t *array)
-#ifdef ARRAY_IMPL
-{
-	PRINT_ENTER("clear_array");
-	if (!array) {
-		ERROR("Unexpected null array");
-		return;
-	}
-
-	DEBUG("Clearing an array");
-	update_array_size(array);
-	if (array->size == 0) {
-		DEBUG("An array is already empty");
-		return;
-	}
-
-	for (int i = array->size - 1; i >= 0; i--) {
-		remove_element(array, i);
-	}
-
-	DEBUG("Cleared an array");
-	PRINT_RETURN("clear_array");
-}
-#else
-;
-#endif
-
-void delete_array(array_t *array)
-#ifdef ARRAY_IMPL
-{
-	PRINT_ENTER("delete_array");
-	if (!array) {
-		ERROR("Unexpected null array");
-		return;
-	}
-
-	DEBUG("Deleting an array");
-	clear_array(array);
-	if (array->base) {
-		free(array->base);
-	}
-	free(array);
-	DEBUG("Array deleted");
-	PRINT_RETURN("delete_array");
-}
-#else
-;
-#endif
-
-
-
 element_t *get_element(array_t *array, size_t index)
 #ifdef ARRAY_IMPL
 {
@@ -388,5 +337,56 @@ void remove_element(array_t *array, size_t index)
 #else
 ;
 #endif
+
+void clear_array(array_t *array)
+#ifdef ARRAY_IMPL
+{
+        PRINT_ENTER("clear_array");
+        if (!array) {
+                ERROR("Unexpected null array");
+                return;
+        }
+
+        DEBUG("Clearing an array");
+        update_array_size(array);
+        if (array->size == 0) {
+                DEBUG("An array is already empty");
+                return;
+        }
+
+        for (int i = array->size - 1; i >= 0; i--) {
+                remove_element(array, i);
+        }
+
+        DEBUG("Cleared an array");
+        PRINT_RETURN("clear_array");
+}
+#else
+;
+#endif
+
+void delete_array(array_t *array)
+#ifdef ARRAY_IMPL
+{
+        PRINT_ENTER("delete_array");
+        if (!array) {
+                ERROR("Unexpected null array");
+                return;
+        }
+
+        DEBUG("Deleting an array");
+        clear_array(array);
+        if (array->base) {
+                free(array->base);
+        }
+        free(array);
+        DEBUG("Array deleted");
+        PRINT_RETURN("delete_array");
+}
+#else
+;
+#endif
+
+
 
 #endif
