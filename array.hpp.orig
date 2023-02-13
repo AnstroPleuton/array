@@ -8,8 +8,8 @@
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -27,9 +27,8 @@
 
 #ifndef ARRAY_HPP
 #define ARRAY_HPP "array.hpp"
-#define ARRAY_IMPL
 
-// This header is just a wrapper for the Minimal C Dynamic Array
+// Remember, this is just a wrapper in first place
 #include "array.h"
 
 namespace aplib
@@ -37,47 +36,32 @@ namespace aplib
 template<typename type_t>
 class array
 {
-public:
-	class iterator;
-private:
 	array_t *internal_array;
 public:
 
 	array();
+
 	~array();
 
 	array<type_t> &insert(size_t index);
 	array<type_t> &insert(size_t index, type_t value);
+
 	array<type_t> &erase(size_t index);
 
 	size_t size();
-	type_t &at(size_t index);
-	array<type_t> &clear();
 
 	array<type_t> &push_back();
+
 	array<type_t> &push_back(type_t value);
+
 	array<type_t> &pop_back();
 
 	class iterator
 	{
-		array_t *array;
-		size_t index;
-	public:
-		iterator(array_t *internal_array);
-		iterator() = default;
-
-		iterator &operator++();
-		bool operator!=(const iterator &compare);
-		type_t &operator*();
-		
-		friend class array;
+		iterator(element_t *element_ptr)
+		element_t *element;
 	};
-	friend class iterator;
 
-	iterator begin();
-	iterator end();
-
-	type_t &operator[](size_t index);
 };
 }
 
@@ -123,88 +107,31 @@ size_t aplib::array<type_t>::size()
 }
 
 template<typename type_t>
-type_t &aplib::array<type_t>::at(size_t index)
-{
-	return *(type_t *) get_element(internal_array, index)->data;
-}
-
-template<typename type_t>
-aplib::array<type_t> &aplib::array<type_t>::clear()
-{
-	clear_array(internal_array);
-	return *this;
-}
-
-template<typename type_t>
 aplib::array<type_t> &aplib::array<type_t>::push_back()
 {
 	insert(size());
 	return *this;
 }
-
 template<typename type_t>
 aplib::array<type_t> &aplib::array<type_t>::push_back(type_t value)
 {
 	insert(size(), value);
 	return *this;
 }
-
 template<typename type_t>
 aplib::array<type_t> &aplib::array<type_t>::pop_back()
 {
 	erase(size());
 	return *this;
 }
-
 template<typename type_t>
-aplib::array<type_t>::iterator::iterator(array_t *internal_array)
-	: array(internal_array)
-{
-	index = 0;
-}
-
+aplib::array<type_t>::iterator::iterator(element_t *element_ptr)
+			: element(element_ptr)
+		{
+		}
 template<typename type_t>
-typename aplib::array<type_t>::iterator &
-aplib::array<type_t>::iterator::operator++()
-{
-	index++;
-	return *this;
-}
-
 template<typename type_t>
-bool aplib::array<type_t>::iterator::operator!=(const
-        aplib::array<type_t>::iterator& compare)
-{
-	return index != compare.index;
-}
-
-template<typename type_t>
-type_t &aplib::array<type_t>::iterator::operator*()
-{
-	return *(type_t *) get_element(array, index)->data;
-}
-
-template<typename type_t>
-typename aplib::array<type_t>::iterator aplib::array<type_t>::begin()
-{
-	iterator beginning(internal_array);
-	beginning.index = 0;
-	return beginning;
-}
-
-template<typename type_t>
-typename aplib::array<type_t>::iterator aplib::array<type_t>::end()
-{
-	iterator ending(internal_array);
-	ending.index = size();
-	return ending;
-}
-
-template<typename type_t>
-type_t &aplib::array<type_t>::operator[](size_t index)
-{
-	return at(index);
-}
+template<typename type_t>;
 
 // ARRAY_IMPL
 #endif

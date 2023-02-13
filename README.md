@@ -53,17 +53,17 @@ Define **ARRAY_IMPL** to implement the function definitions. <br>
 Include the library **array.hpp** to your C++ program. <br>
 an array is of type **array** which is a class template. <br>
 Use an array type as **aplib::array\<typename\>** to use, it will automatically initialize an array. <br>
-You can add an element to an array using **add** method. <br>
-You can remove an elementfrom an array by using **remove** method. <br>
+You can add an element to an array using **insert** method. <br>
+You can remove an elementfrom an array by using **erase** method. <br>
 You are not required to delete an array because it is done automatically inside the de-constructor!
 **Example:**
 ```cpp
         aplib::array<int> myArray; // Create an array
-        myArray.add(myArray.size()); // This will add an element at the end of an array
-        myArray.add(0); // This will add an element at the begining of an array
-        myArray.add(myArray.size(), 20); // This will add an element at the end of an array with the value
-        myArray.remove(myArray.size()); // This will remove an element from the end of an array
-        myArray.remove(0); // This will remove an element from the begining of an array
+        myArray.insert(myArray.size()); // This will add an element at the end of an array
+        myArray.insert(0); // This will add an element at the begining of an array
+        myArray.insert(myArray.size(), 20); // This will add an element at the end of an array with the value
+        myArray.erase(myArray.size()); // This will remove an element from the end of an array
+        myArray.erase(0); // This will remove an element from the begining of an array
         // The array is automatically destroyed if it goes out of scope
         myArray.push_back(); // This will add an element at the end of an array
         myArray.push_back(40); // This will add an element at the end of an array with the value

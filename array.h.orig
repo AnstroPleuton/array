@@ -4,12 +4,12 @@
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sub-license, and/or sell
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -38,21 +38,17 @@
  */
 
 #ifdef PRINT_INFO
-#define PRINT_ENTER(function) \
-	printf("  Info: file: %s, function enters: %s\n", ARRAY_H, function)
-#define PRINT_RETURN(function) \
-	printf("  Info: file: %s, function return: %s\n", ARRAY_H, function)
+#define PRINT_ENTER(function) printf("  Info: file: %s, function enters: %s\n", ARRAY_H, function)
+#define PRINT_RETURN(function) printf("  Info: file: %s, function return: %s\n", ARRAY_H, function)
 #else
 #define PRINT_ENTER(function)
 #define PRINT_RETURN(function)
 #endif
-
 #ifdef PRINT_DEBUG
 #define DEBUG(string) printf("    Degug: %s\n", string)
 #else
 #define DEBUG(string)
 #endif
-
 #ifdef PRINT_ERROR
 #define ERROR(string) printf("    Error: %s\n", string)
 #else
@@ -78,20 +74,20 @@ typedef struct {
 array_t *create_array(size_t typesize);
 element_t *get_element(array_t *array, size_t index);
 
-int update_array_size(array_t *array);
+void update_array_size(array_t *array);
 size_t get_array_size(array_t *array);
 
 /* These functions are not supposed to be used externally */
 element_t *create_element(size_t typesize);
-int delete_element(element_t *element);
+void delete_element(element_t *element);
 
 /* You can add element at the end of the
  * array by giving it the size of the array */
 element_t *add_element(array_t *array, size_t index);
-int remove_element(array_t *array, size_t index);
+void remove_element(array_t *array, size_t index);
 
-int clear_array(array_t *array);
-int delete_array(array_t *array);
+void clear_array(array_t *array);
+void delete_array(array_t *array);
 
 #ifdef ARRAY_IMPL
 
@@ -142,7 +138,7 @@ element_t *get_element(array_t *array, size_t index)
 
 	/* Note, I am not using 'i <= index' because I want
 	 * the size to overflow in case the index was -1 */
-	for (size_t i = 0; i < (index + 1); i++) {
+	for (int i = 0; i < (index + 1); i++) {
 		element = (element_t *) element->next;
 
 		if (!element) {
@@ -157,7 +153,7 @@ element_t *get_element(array_t *array, size_t index)
 
 
 
-int update_array_size(array_t *array)
+void update_array_size(array_t *array)
 {
 	PRINT_ENTER("update_array_size");
 	element_t *element = NULL;
@@ -165,7 +161,7 @@ int update_array_size(array_t *array)
 
 	if (!array) {
 		ERROR("Unexpected null array");
-		return 1;
+		return;
 	}
 
 	DEBUG("Calculating an array size");
@@ -180,7 +176,6 @@ int update_array_size(array_t *array)
 	--size;
 	DEBUG("Successfully calculated the size of an array");
 	PRINT_RETURN("update_array_size");
-	return 0;
 }
 
 size_t get_array_size(array_t *array)
@@ -190,10 +185,7 @@ size_t get_array_size(array_t *array)
 		ERROR("Unexpected null array");
 		return 0;
 	}
-	if (update_array_size(array)) {
-		ERROR("Unable to update array size");
-		return 0;
-	}
+	update_array_size(array);
 	PRINT_RETURN("get_array_size");
 	return array->size;
 }
@@ -226,12 +218,12 @@ element_t *create_element(size_t typesize)
 	return element;
 }
 
-int delete_element(element_t *element)
+void delete_element(element_t *element)
 {
 	PRINT_ENTER("delete_element");
 	if (!element) {
 		ERROR("Unexpected null element");
-		return 1;
+		return;
 	}
 
 	if (element->data) {
@@ -239,7 +231,6 @@ int delete_element(element_t *element)
 	}
 	free(element);
 	PRINT_RETURN("delete_element");
-	return 0;
 }
 
 
@@ -256,10 +247,7 @@ element_t *add_element(array_t *array, size_t index)
 		return NULL;
 	}
 
-	if (update_array_size(array)) {
-		ERROR("Unable to update array size");
-		return NULL;
-	}
+	update_array_size(array);
 	if (index > array->size) {
 		ERROR("Index larger than the (size + 1) of an array");
 		return NULL;
@@ -271,13 +259,11 @@ element_t *add_element(array_t *array, size_t index)
 
 	/* There can't be no previous because the base should exist */
 	if (!prev) {
-		ERROR("Cannot find the previous element "
-		      "or the base of an array");
+		ERROR("Cannot find the previous element or the base of an array");
 		return NULL;
 	}
 	if (!new_element) {
-		ERROR("Cannot allocate memory for an "
-		      "element to be added to an array");
+		ERROR("Cannot allocate memory for an element to be added to an array");
 		return NULL;
 	}
 
@@ -292,7 +278,7 @@ element_t *add_element(array_t *array, size_t index)
 	return new_element;
 }
 
-int remove_element(array_t *array, size_t index)
+void remove_element(array_t *array, size_t index)
 {
 	PRINT_ENTER("remove_element");
 	element_t *element = NULL;
@@ -301,22 +287,19 @@ int remove_element(array_t *array, size_t index)
 
 	if (!array) {
 		ERROR("Unexpected null array");
-		return 1;
+		return;
 	}
-	if (update_array_size(array)) {
-		ERROR("Unable to update array size");
-		return 2;
-	}
+	update_array_size(array);
 	if (index >= array->size) {
 		ERROR("Index larger than the size of an array");
-		return 3;
+		return;
 	}
 
 	DEBUG("Removing an element");
 	element = get_element(array, index);
 	if (!element) {
 		ERROR("Cannot find an element");
-		return 4;
+		return;
 	}
 
 	prev = get_element(array, index - 1);
@@ -326,9 +309,8 @@ int remove_element(array_t *array, size_t index)
 		next = get_element(array, index + 1);
 	}
 	if (!prev) {
-		ERROR("Cannot find the previous element "
-		      "or the base of an array");
-		return 5;
+		ERROR("Cannot find the previous element or the base of an array");
+		return;
 	}
 
 	prev->next = NULL;
@@ -336,67 +318,54 @@ int remove_element(array_t *array, size_t index)
 		prev->next = next;
 	}
 
-	if (delete_element(element)) {
-		ERROR("Unable to delete an element");
-		return 6;
-	}
+	delete_element(element);
 	array->size--;
 
 	DEBUG("Removed an element");
 	PRINT_RETURN("remove_element");
-	return 0;
 }
 
 
 
-int clear_array(array_t *array)
+void clear_array(array_t *array)
 {
-	PRINT_ENTER("clear_array");
-	if (!array) {
-		ERROR("Unexpected null array");
-		return 1;
-	}
+        PRINT_ENTER("clear_array");
+        if (!array) {
+                ERROR("Unexpected null array");
+                return;
+        }
 
-	DEBUG("Clearing an array");
-	if (update_array_size(array)) {
-		ERROR("Unable to update array size");
-		return 2;
-	}
-	if (array->size == 0) {
-		DEBUG("An array is already empty");
-		/* This is not considered an error */
-		return 0;
-	}
+        DEBUG("Clearing an array");
+        update_array_size(array);
+        if (array->size == 0) {
+                DEBUG("An array is already empty");
+                return;
+        }
 
-	for (int i = array->size - 1; i >= 0; i--) {
-		remove_element(array, i);
-	}
+        for (int i = array->size - 1; i >= 0; i--) {
+                remove_element(array, i);
+        }
 
-	DEBUG("Cleared an array");
-	PRINT_RETURN("clear_array");
-	return 0;
+        DEBUG("Cleared an array");
+        PRINT_RETURN("clear_array");
 }
 
-int delete_array(array_t *array)
+void delete_array(array_t *array)
 {
-	PRINT_ENTER("delete_array");
-	if (!array) {
-		ERROR("Unexpected null array");
-		return 1;
-	}
+        PRINT_ENTER("delete_array");
+        if (!array) {
+                ERROR("Unexpected null array");
+                return;
+        }
 
-	DEBUG("Deleting an array");
-	if (clear_array(array)) {
-		ERROR("Unable to clear an array");
-		return 2;
-	}
-	if (array->base) {
-		free(array->base);
-	}
-	free(array);
-	DEBUG("Array deleted");
-	PRINT_RETURN("delete_array");
-	return 0;
+        DEBUG("Deleting an array");
+        clear_array(array);
+        if (array->base) {
+                free(array->base);
+        }
+        free(array);
+        DEBUG("Array deleted");
+        PRINT_RETURN("delete_array");
 }
 
 /* ARRAY_IMPL */
@@ -404,4 +373,3 @@ int delete_array(array_t *array)
 
 /* ARRAY_H */
 #endif
-
