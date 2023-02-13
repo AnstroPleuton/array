@@ -55,7 +55,7 @@ ctest: $(CTEST) $(CHEADER)
 cpptest: $(CPPTEST) $(CPPHEADER)
 	$(CXX) -o $(CPPTESTOUT) $(CPPTEST) $(CPPINCLUDEDIR) $(CPPFLAGS)
 
-# Only works on GNU/Linux sustems
+# Only works on GNU/Linux systems
 install:
 ifneq ($(OS), Linux)
 	echo "This works in GNU/Linux, get one now!"

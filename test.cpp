@@ -90,7 +90,7 @@ int main()
 
 	// Remove an element from the beginning of an array
 	myArray.erase(0);
-	
+
 	// Clear the elements from the array
 	myArray.clear();
 

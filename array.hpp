@@ -69,7 +69,7 @@ public:
 		iterator &operator++();
 		bool operator!=(const iterator &compare);
 		type_t &operator*();
-		
+
 		friend class array;
 	};
 	friend class iterator;
