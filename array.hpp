@@ -27,7 +27,6 @@
 
 #ifndef ARRAY_HPP
 #define ARRAY_HPP "array.hpp"
-#define ARRAY_IMPL
 
 // This header is just a wrapper for the Minimal C Dynamic Array
 #include "array.h"
