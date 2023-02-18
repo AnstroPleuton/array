@@ -1,3 +1,5 @@
+# WARNING
+This repository is no longer maintained. The **array** has been renamed to **list** so please go to ["List" repository](https://github.com/AnstroPleuton/list)
 # array
 A Minimal C Dynamic Array
 
